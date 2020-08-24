@@ -20,32 +20,30 @@
 var reverseKGroup = function(head, k) {
     let node = new ListNode(0)
     node.next = head
-    let pre = node
-    let end = node
-    while(end.next != null) {
-        for(let i = 0; i < k && end != null; i++) end = end.next
-        if(end === null) break
-        let start = pre.next
-        let next = end.next
+    let a = node.next
+    let b = node.next
+    for(let i = 0; i < k; i++) {
+        if (!b) return head
+        b = b.next
+    }
 
-        end.next = null
-        pre.next = reverse(start)
-        start.next = next
-        pre = start
-        end = pre
-    }
-    return node.next
+    let newHead = new ListNode(0)
+    newHead.next = reverse(a, b)
+    a.next = reverseKGroup(b, k)
+    return newHead.next
 };
-function reverse(head) {
-    let pre = null;
-    let curr = head;
-    while (curr != null) {
-        let next = curr.next;
-        curr.next = pre;
-        pre = curr;
-        curr = next;
+function reverse(a, b) {
+    // 翻转a->b
+    let pre = null, cur = a, next = a
+    while(cur != b) {
+        //每次处理一个节点，指向当前节点的前一个节点
+        next = cur.next
+        cur.next = pre
+
+        pre = cur
+        cur = next
     }
-    return pre;
+    return pre
 }
 // @lc code=end
 
